@@ -9,6 +9,9 @@ Uses XAMPP Control pannel for servers
 - Run Apache and MySQL 
 - Click the 'Admin' button next to the MySQL server to access database web interface
 
+
+Run nodemon command while in the /Server file to enable auto restart of the server once changes have been saved
+
 MySQL Database:
 Database: web_app
 
