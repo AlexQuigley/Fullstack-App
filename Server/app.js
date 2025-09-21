@@ -35,7 +35,7 @@ app.get('/getAll', (request, response) => {
     const result = db.getAllData();
     
     result
-        .then(data => response.json({data: data}))
+        .then(data => response.json({ data: data }))
         .catch(err => console.log(err));
 
     /*
@@ -43,11 +43,20 @@ app.get('/getAll', (request, response) => {
         success: true
     });
     */
-})
+});
 
 
 // Update
+app.patch('/update', (request, response) => {
+    const { id, name } = request.body;
+    const db = dbService.getDbServiceInstance();
 
+    const result = db.updateNameById(id, name);
+
+    result
+        .then(data => response.json({ success: data }))
+        .catch(err => console.log(err));
+});
 
 
 // Delete
@@ -58,9 +67,14 @@ app.delete('/delete/:id', (request, response) => {
     const result = db.deleteRowById(id);
     
     result
-        .then(data => response.json({success: data}))
+        .then(data => response.json({ success: data }))
         .catch(err => console.log(err));
 
+});
+
+app.get('/search/:name', (request, response) => {
+    const { name } = request.params;
+    const db = dbService.getDbServiceInstance();
 })
 
 app.listen(process.env.PORT, () => console.log('app is running'));

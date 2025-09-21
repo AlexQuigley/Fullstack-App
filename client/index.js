@@ -1,30 +1,72 @@
-// Client Side js file
-
-
 document.addEventListener('DOMContentLoaded', function () {
     fetch('http://localhost:5000/getAll')
-        .then(response => response.json())
-        .then(data => loadHTMLTable(data['data']));
-
+    .then(response => response.json())
+    .then(data => loadHTMLTable(data['data']));
+    
 });
 
-document.querySelector('table tbody').addEventListener('click', function (event) {
+document.querySelector('table tbody').addEventListener('click', function(event) {
     if (event.target.className === "delete-row-btn") {
         deleteRowById(event.target.dataset.id);
     }
+    if (event.target.className === "edit-row-btn") {
+        handleEditRow(event.target.dataset.id);
+    }
 });
+
+const updateBtn = document.querySelector('#update-row-btn');
+const searchBtn = document.querySelector('#search-btn');
+
+searchBtn.onclick = function() {
+    const searchValue = document.querySelector('#search-input').value;
+
+    fetch('http://localhost:5000/search/' + searchValue)
+    .then(response => response.json())
+    .then(data => loadHTMLTable(data['data']));
+}
 
 function deleteRowById(id) {
     fetch('http://localhost:5000/delete/' + id, {
         method: 'DELETE'
     })
     .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
+    .then(data => {
+        if (data.success) {
+            location.reload();
         }
     });
 }
+
+function handleEditRow(id) {
+    const updateSection = document.querySelector('#update-row');
+    updateSection.hidden = false;
+    document.querySelector('#update-name-input').dataset.id = id;
+}
+
+updateBtn.onclick = function() {
+    const updateNameInput = document.querySelector('#update-name-input');
+
+
+    console.log(updateNameInput);
+
+    fetch('http://localhost:5000/update', {
+        method: 'PATCH',
+        headers: {
+            'Content-type' : 'application/json'
+        },
+        body: JSON.stringify({
+            id: updateNameInput.dataset.id,
+            name: updateNameInput.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    })
+}
+
 
 const addBtn = document.querySelector('#add-name-btn');
 
@@ -38,17 +80,17 @@ addBtn.onclick = function () {
             'Content-type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({ name: name })
+        body: JSON.stringify({ name : name})
     })
-        .then(response => response.json())
-        .then(data => insertRowIntoTable(data['data']))
-    ;
+    .then(response => response.json())
+    .then(data => insertRowIntoTable(data['data']));
 }
 
 function insertRowIntoTable(data) {
+    console.log(data);
     const table = document.querySelector('table tbody');
-    const doesTableDataExist = table.querySelector('.no-data');
-    
+    const isTableData = table.querySelector('.no-data');
+
     let tableHtml = "<tr>";
 
     for (var key in data) {
@@ -65,7 +107,7 @@ function insertRowIntoTable(data) {
 
     tableHtml += "</tr>";
 
-    if (doesTableDataExist) {
+    if (isTableData) {
         table.innerHTML = tableHtml;
     } else {
         const newRow = table.insertRow();
