@@ -42,7 +42,7 @@ function handleEditRow(id) {
     updateSection.hidden = false;
     document.querySelector('#update-name-input').dataset.id = id;
 }
-
+// Third change here
 updateBtn.onclick = function() {
     const updateNameInput = document.querySelector('#update-name-input');
 
