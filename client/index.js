@@ -36,7 +36,7 @@ function deleteRowById(id) {
         }
     });
 }
-
+// More changes here (Change 2 electric boogaloo)
 function handleEditRow(id) {
     const updateSection = document.querySelector('#update-row');
     updateSection.hidden = false;
