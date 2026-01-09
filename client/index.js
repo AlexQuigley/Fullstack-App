@@ -24,7 +24,7 @@ searchBtn.onclick = function() {
     .then(response => response.json())
     .then(data => loadHTMLTable(data['data']));
 }
-
+// La la la adding changes to test
 function deleteRowById(id) {
     fetch('http://localhost:5000/delete/' + id, {
         method: 'DELETE'
